@@ -1,5 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { Link } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { login } from "../../actions/auth";
+import { Redirect } from "react-router";
+import { useSelector } from "react-redux";
 
 export const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +13,8 @@ export const Login = () => {
 
   const { email, password } = formData;
 
+  const dispatch = useDispatch();
+
   const onChange = (e) =>
     setFormData({
       ...formData,
@@ -17,9 +23,14 @@ export const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("Success");
+    dispatch(login(email,password));
   };
+
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  if(isAuthenticated){
+    return <Redirect to='/' />;
+  }
+
   return (
     <Fragment>
       <h1 className="large text-primary">Sign In</h1>
@@ -59,3 +70,5 @@ export const Login = () => {
     </Fragment>
   );
 };
+
+
