@@ -1,11 +1,10 @@
 import React, { Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import { login } from "../../actions/auth";
-import { Redirect } from "react-router";
-import { useSelector } from "react-redux";
 
-export const Login = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -28,7 +27,7 @@ export const Login = () => {
 
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   if(isAuthenticated){
-    return <Redirect to='/' />;
+    return <Redirect to='/dashboard' />;
   }
 
   return (
@@ -72,3 +71,4 @@ export const Login = () => {
 };
 
 
+export default Login;

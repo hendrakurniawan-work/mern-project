@@ -61,13 +61,13 @@ router.get("/:id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     if (!post) {
-      res.status(404).json({ msg: "Post Not Found" });
+      res.status(404).json({ message: "Post Not Found" });
     }
     res.json(post);
   } catch (error) {
     console.error(error.message);
     if (error.kind == "ObjectId") {
-      res.status(400).json({ msg: "Post not found" });
+      res.status(400).json({ message: "Post not found" });
     }
     res.status(500).send("Server Error");
   }
@@ -81,15 +81,15 @@ router.delete("/:id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     if (post.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "User not authorized" });
+      return res.status(401).json({ message: "User not authorized" });
     }
 
     await post.remove();
-    res.json({ msg: "Post deleted" });
+    res.json({ message: "Post deleted" });
   } catch (error) {
     console.error(error.message);
     if (error.kind == "ObjectId") {
-      res.status(400).json({ msg: "Post not found" });
+      res.status(400).json({ message: "Post not found" });
     }
     res.status(500).send("Server Error");
   }
@@ -107,7 +107,7 @@ router.put("/like/:id", auth, async (req, res) => {
       post.likes.filter((like) => like.user.toString() === req.user.id).length >
       0
     ) {
-      return res.status(400).json({ msg: "Post already liked" });
+      return res.status(400).json({ message: "Post already liked" });
     }
 
     post.likes.unshift({ user: req.user.id });
@@ -118,7 +118,7 @@ router.put("/like/:id", auth, async (req, res) => {
   } catch (error) {
     console.error(error.message);
     if (error.kind == "ObjectId") {
-      res.status(400).json({ msg: "Post not found" });
+      res.status(400).json({ message: "Post not found" });
     }
     res.status(500).send("Server Error");
   }
@@ -136,7 +136,7 @@ router.put("/unlike/:id", auth, async (req, res) => {
       post.likes.filter((like) => like.user.toString() === req.user.id)
         .length == 0
     ) {
-      return res.status(400).json({ msg: "Post has not been liked" });
+      return res.status(400).json({ message: "Post has not been liked" });
     }
 
     // Get remove index
@@ -152,7 +152,7 @@ router.put("/unlike/:id", auth, async (req, res) => {
   } catch (error) {
     console.error(error.message);
     if (error.kind == "ObjectId") {
-      res.status(400).json({ msg: "Post not found" });
+      res.status(400).json({ message: "Post not found" });
     }
     res.status(500).send("Server Error");
   }
@@ -207,11 +207,11 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     );
 
     if (!comment) {
-      return res.status(404).json({ msg: "Comment does not exist" });
+      return res.status(404).json({ message: "Comment does not exist" });
     }
 
     if (comment.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "User not authorized" });
+      return res.status(401).json({ message: "User not authorized" });
     }
 
     // Get remove index
@@ -227,7 +227,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   } catch (error) {
     console.error(error.message);
     if (error.kind == "ObjectId") {
-      res.status(400).json({ msg: "Post not found" });
+      res.status(400).json({ message: "Post not found" });
     }
     res.status(500).send("Server Error");
   }

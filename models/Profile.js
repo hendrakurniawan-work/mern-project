@@ -91,7 +91,7 @@ const ProfileSchema = new mongoose.Schema({
       },
     },
   ],
-  socials: [
+  social: [
     {
       twitter: {
         type: String,

@@ -6,6 +6,7 @@ const User = require("../../models/User");
 const { check, validationResult } = require("express-validator");
 const request = require("request");
 const config = require("config");
+const Post = require("../../models/Post");
 
 // @route   GET api/profile/me
 // @desc    Get current user's profile
@@ -18,7 +19,7 @@ router.get("/me", auth, async (req, res) => {
     );
 
     if (!profile) {
-      return res.status(400).json({ msg: "There is no profile for this user" });
+      return res.status(400).json({ message: "There is no profile for this user" });
     }
     res.json(profile);
   } catch (error) {
@@ -71,8 +72,6 @@ router.post(
     if (skills) {
       profileFields.skills = skills.split(",").map((skill) => skill.trim());
     }
-
-    console.log(skills);
 
     // Build social object
     profileFields.social = {};
@@ -144,13 +143,16 @@ router.get("/user/:user_id", async (req, res) => {
 // @access  Private (auth needed)
 router.delete("/", auth, async (req, res) => {
   try {
-    // @todo - remove user posts
+    // Remove User Post
+    await Post.deleteMany({user: req.user.id});
+
     // Remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
 
+    // Remove User
     await User.findOneAndRemove({ _id: req.user.id });
 
-    res.json({ msg: "User and user profile deleted" });
+    res.json({ message: "User and user profile deleted" });
   } catch (error) {
     console.error(err.message);
 
@@ -322,7 +324,7 @@ router.get("/github/:username", async (req, res) => {
       if(error) console.error(error);
 
       if(response.statusCode !== 200) {
-        res.status(404).json({msg:"No github profile found "});
+        res.status(404).json({message:"No github profile found "});
       }
 
       res.json(JSON.parse(body));

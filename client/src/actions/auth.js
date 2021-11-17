@@ -1,16 +1,10 @@
 import axios from "axios";
+import setAuthToken from "../utils/setAuthToken";
 import { setAlert } from "./alert";
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT,
+  AUTH_ERROR, CLEAR_PROFILE, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, REGISTER_FAIL, REGISTER_SUCCESS, USER_LOADED
 } from "./types";
 
-import setAuthToken from "../utils/setAuthToken";
 
 // Load User
 export const loadUser = () => async (dispatch) => {
@@ -56,7 +50,7 @@ export const register =
       const errors = error.response.data.errors;
 
       if (errors) {
-        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+        errors.forEach((error) => dispatch(setAlert(error.message, "danger")));
       }
       dispatch({
         type: REGISTER_FAIL,
@@ -87,7 +81,8 @@ export const login = (email, password) => async (dispatch) => {
     const errors = error.response.data.errors;
 
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      errors.forEach((error) =>{
+        dispatch(setAlert(error.message, "danger"))});
     }
 
     dispatch({
@@ -97,5 +92,6 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+  dispatch({ type: CLEAR_PROFILE});
   dispatch({ type: LOGOUT });
 };
