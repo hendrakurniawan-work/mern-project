@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+
 const ProfileItem = () => {
   const profiles = useSelector((state) => state.profile.profiles);
   const profileItems = profiles.map((profile) => {
